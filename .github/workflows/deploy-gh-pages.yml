@@ -40,13 +40,18 @@ jobs:
       - name: Echo tag
         run: echo "Releasing as ${{ steps.gen_tag.outputs.tag }}"
 
-      - name: Create GitHub Release
-        uses: actions/create-release@v1
+      - name: Archive public folder
+        run: |
+          zip -r site.zip public
+
+      - name: Create release
+        uses: ncipollo/release-action@v1
         with:
-          tag_name: ${{ steps.gen_tag.outputs.tag }}
-          release_name: Release ${{ steps.gen_tag.outputs.tag }}
+          artifacts: "site.zip"
           draft: false
-          prerelease: false
+          tag: ${{ steps.gen_tag.outputs.tag }}
+          commit: ${{ github.event.inputs.branch }}
+          generateReleaseNotes: true
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
