@@ -7,9 +7,11 @@ on:
         description: "Branch"
         required: true
         default: "main"
-      tag:
-        description: "Release Tag"
-        required: true
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
 
 jobs:
   build:
@@ -28,6 +30,24 @@ jobs:
         run: |
           make build
           ./dist/blog -out ./public
+
+      - name: Determine release tag
+        id: gen_tag
+        run: |
+          TAG=v$(date '+%Y%m%d%H%M%S')
+          echo "tag=$TAG" >> $GITHUB_OUTPUT
+
+      - name: Echo tag
+        run: echo "Releasing as ${{ steps.gen_tag.outputs.tag }}"
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ steps.gen_tag.outputs.tag }}
+          release_name: Release ${{ steps.gen_tag.outputs.tag }}
+          draft: false
+          prerelease: false
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
 
