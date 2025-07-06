@@ -22,3 +22,5 @@ It's cool! But seriously when do we actually need or want a plugin system and wh
 ## Aiming to be boring: Doing Go
 In my situation, the project is in Go. Go is a very boring language (eg no OOP and all that) and that's exactly why it's perfect for building systems that aim to be reliable. Go as the "runtime" directly clears out many options. You could eg include running a python interpreter or a JVM, but it would very much defeat the intent of being boring as it would bring a whole lot of adventurous new problems.
 In Go, to dynamically load 3rd party functionality, there are two options: DDLs or the famous `exec`.
+
+![image](../assets/2025-07-06-spiderman-meme.png)
