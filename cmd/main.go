@@ -60,23 +60,27 @@ func convertMarkdown(srcDir, dstDir string) ([]Post, error) {
 			return nil, fmt.Errorf("converting markdown %s: %w", srcPath, err)
 		}
 
-		page, err := RenderPage(buf.String())
+		outName := strings.TrimSuffix(entry.Name(), filepath.Ext(entry.Name())) + ".html"
+		dstPath := filepath.Join(dstDir, outName)
+
+		post := Post{
+			Title:      meta.Title,
+			Date:       meta.Date,
+			Teaser:     meta.Teaser,
+			Thumbnail:  meta.Thumbnail,
+			Background: meta.Background,
+			URL:        filepath.Join("posts", outName),
+		}
+
+		page, err := RenderPage(buf.String(), post)
 		if err != nil {
 			return nil, fmt.Errorf("rendering template: %w", err)
 		}
 
-		outName := strings.TrimSuffix(entry.Name(), filepath.Ext(entry.Name())) + ".html"
-		dstPath := filepath.Join(dstDir, outName)
 		if err := os.WriteFile(dstPath, []byte(page), 0644); err != nil {
 			return nil, fmt.Errorf("writing html file %s: %w", dstPath, err)
 		}
-		posts = append(posts, Post{
-			Title:     meta.Title,
-			Date:      meta.Date,
-			Teaser:    meta.Teaser,
-			Thumbnail: meta.Thumbnail,
-			URL:       filepath.Join("posts", outName),
-		})
+		posts = append(posts, post)
 	}
 	return posts, nil
 }

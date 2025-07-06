@@ -10,10 +10,11 @@ import (
 )
 
 type Meta struct {
-	Title     string    `yaml:"title"`
-	Date      time.Time `yaml:"date"`
-	Teaser    string    `yaml:"teaser"`
-	Thumbnail string    `yaml:"thumbnail"`
+	Title      string    `yaml:"title"`
+	Date       time.Time `yaml:"date"`
+	Teaser     string    `yaml:"teaser"`
+	Thumbnail  string    `yaml:"thumbnail"`
+	Background string    `yaml:"background"`
 }
 
 func ParseFrontMatter(input string) (Meta, string, error) {
@@ -43,19 +44,31 @@ func ParseFrontMatter(input string) (Meta, string, error) {
 	return meta, body, nil
 }
 
-func RenderPage(content string) (string, error) {
-	tmpl, err := template.ParseFS(tmplFS, "templates/post.html")
+func RenderPage(content string, post Post) (string, error) {
+	// 1) Create a new template and register your funcs.
+	tmpl := template.New("post.html").Funcs(template.FuncMap{
+		// formatDate takes a time.Time and a layout string.
+		"formatDate": func(t time.Time, layout string) string {
+			return t.Format(layout)
+		},
+	})
+
+	// 2) Parse your files into that template instance.
+	tmpl, err := tmpl.ParseFS(tmplFS, "templates/post.html")
 	if err != nil {
 		return "", err
 	}
 
-	// Use template.HTML to tell the engine this is trusted HTML.
+	// 3) Build your data context as before.
 	data := struct {
 		Content template.HTML
+		Post
 	}{
 		Content: template.HTML(content),
+		Post:    post,
 	}
 
+	// 4) Execute.
 	var buf bytes.Buffer
 	if err := tmpl.Execute(&buf, data); err != nil {
 		return "", err

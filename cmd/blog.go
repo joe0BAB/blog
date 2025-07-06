@@ -10,11 +10,12 @@ import (
 
 // Post represents a blog post in the TOC.
 type Post struct {
-	Title     string
-	Date      time.Time
-	Teaser    string
-	Thumbnail string
-	URL       string
+	Title      string
+	Date       time.Time
+	Teaser     string
+	Thumbnail  string
+	Background string
+	URL        string
 }
 
 //go:embed templates

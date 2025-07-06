@@ -1,8 +1,9 @@
 ---
 title: "This is a fancy title"
 date: 2025-07-21
-teaser: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.
+teaser: Lorem ipsum dolor sit amet, consetetur sadipscing elitr no sea takimata sanctus est Lorem ipsum dolor sit amet.
 thumbnail: "assets/2025-07-06-thumbnail.png"
+background: "assets/2025-07-06-thumbnail.png"
 ---
 
 ## Why do a plugin system?

@@ -1,15 +1,82 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- Pick the theme you like: github-markdown.css auto-switches light/dark -->
+    <!-- GitHub Markdown styling -->
     <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown.min.css"
     >
+    <!-- Add some custom CSS for header layout -->
+    <style>
+        :root {
+            --content-padding: 0 2rem 2rem 2rem
+        }
+
+        .post-header {
+            position: relative;
+            text-align: left;
+            margin-bottom: 2rem;
+        }
+        .post-cover {
+            width: 100%;
+        }
+        .post-meta {
+            display: flex;
+            align-items: center;
+            margin-top: -40px;  /* pull up over the cover */
+            padding: 0 1rem;
+        }
+        .post-thumbnail {
+            width: 64px;
+            height: 64px;
+            border-radius: 999px;
+            border: 3px solid white;
+            object-fit: cover;
+            background-color: #fff;
+            margin-right: 1rem;
+        }
+        .post-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .post-title {
+            font-size: 2rem;
+            margin: 0;
+            line-height: 1.2;
+        }
+        .post-date {
+            font-size: 0.9rem;
+            color: #555;
+            margin-top: 0.25rem;
+        }
+        .markdown-body {
+            padding: var(--content-padding);
+        }
+    </style>
 </head>
 <body>
-<!-- This wrapper applies GitHub’s spacing, fonts, headings, tables, etc. -->
 <article class="markdown-body">
-    <!-- insert your rendered HTML here -->
-    {{ .Content }}
+
+    <!-- Header with cover, thumbnail, title & date -->
+    <header class="post-header">
+        <img class="post-cover" src="../{{ .Background }}">
+        <!-- Thumbnail + title/date -->
+        <div class="post-meta">
+            <img
+                    class="post-thumbnail"
+                    src="{{ .Thumbnail }}"
+                    alt="Post icon or thumbnail"
+            >
+            <div class="post-info">
+                <h1 class="post-title">{{ .Title }}</h1>
+                <time class="post-date" datetime="{{ .Date }}">
+                    {{ .Date.Format "January 2, 2006" }}
+                </time>
+            </div>
+        </div>
+    </header>
+
+    <article class="markdown-content">
+        {{ .Content }}
+    </article>
 </article>
 </body>
