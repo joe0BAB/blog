@@ -34,4 +34,4 @@ clean: ## remove built binaries and packages
 	@sh -c "rm -rf bin dist"
 
 build:
-	CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags "-s -w ${GO_LDFLAGS}" -o ./bin/blog$(EXTENSION) ./cmd
+	CGO_ENABLED=0 GOOS=${TARGETOS} GOARCH=${TARGETARCH} go build -ldflags "-s -w ${GO_LDFLAGS}" -o ./dist/blog$(EXTENSION) ./cmd
