@@ -43,29 +43,12 @@ func ParseFrontMatter(input string) (Meta, string, error) {
 	return meta, body, nil
 }
 
-const pageTemplate = `
-<head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- Pick the theme you like: github-markdown.css auto-switches light/dark -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown.min.css"
-  >
-</head>
-<body>
-  <!-- This wrapper applies GitHub’s spacing, fonts, headings, tables, etc. -->
-  <article class="markdown-body">
-    <!-- insert your rendered HTML here -->
-    {{ .Content }}
-  </article>
-</body>
-
-`
-
-// tmpl is the parsed template ready for execution.
-var tmpl = template.Must(template.New("page").Parse(pageTemplate))
-
 func RenderPage(content string) (string, error) {
+	tmpl, err := template.ParseFS(tmplFS, "templates/post.html")
+	if err != nil {
+		return "", err
+	}
+
 	// Use template.HTML to tell the engine this is trusted HTML.
 	data := struct {
 		Content template.HTML

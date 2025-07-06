@@ -17,7 +17,7 @@ type Post struct {
 	URL       string
 }
 
-//go:embed templates/index.html
+//go:embed templates
 var tmplFS embed.FS
 
 func RenderPosts(posts []Post, dstFile string) error {
