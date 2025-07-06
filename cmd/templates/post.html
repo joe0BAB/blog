@@ -13,6 +13,7 @@
         :root {
             --content-padding: 0 2rem 2rem 2rem;
             --wide-screen-breakpoint: 800px;
+            --thumb-size: 84px;
         }
         @media screen and (max-width: 799px) {
             :root {
@@ -54,13 +55,13 @@
         .post-meta {
             display: flex;
             align-items: center;
-            margin-top: -40px;  /* pull up over the cover */
+            transform: translateY(-50%);
             padding: 0 1rem;
         }
         .post-thumbnail {
-            width: 64px;
-            height: 64px;
-            border-radius: 999px;
+            width: var(--thumb-size);
+            height: var(--thumb-size);
+            border-radius: 100%;
             border: 3px solid white;
             object-fit: cover;
             background-color: #fff;
@@ -70,8 +71,8 @@
             display: flex;
             flex-direction: column;
         }
-        .post-title {
-            font-size: 2rem;
+        h1.post-title {
+            font-size: 3rem;
             margin: 0;
             line-height: 1.2;
         }
@@ -102,12 +103,14 @@
                 class="post-cover"
                 style="background-image: url('../{{ .Background }}');">
         </div>
-        <div class="post-meta">
-            <img
-                    class="post-thumbnail"
-                    src="{{ .Thumbnail }}"
-                    alt="Post icon or thumbnail"
-            >
+        <div style="position: relative">
+            <div class="post-meta">
+                <img
+                        class="post-thumbnail"
+                        src="../{{ .Thumbnail }}"
+                        alt="Post icon or thumbnail"
+                >
+            </div>
             <div class="post-info">
                 <h1 class="post-title">{{ .Title }}</h1>
                 <time class="post-date" datetime="{{ .Date }}">

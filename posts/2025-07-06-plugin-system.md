@@ -1,8 +1,8 @@
 ---
-title: "This is a fancy title"
-date: 2025-07-21
-teaser: Lorem ipsum dolor sit amet, consetetur sadipscing elitr no sea takimata sanctus est Lorem ipsum dolor sit amet.
-thumbnail: "assets/2025-07-06-thumbnail.png"
+title: "Building a Plugin System (in Go)"
+date: 2025-07-06
+teaser: How hard can it be?
+thumbnail: "assets/2025-07-06-avatar.png"
 background: "assets/2025-07-06-thumbnail.png"
 ---
 
