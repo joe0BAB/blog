@@ -5,10 +5,25 @@
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown.min.css"
     >
-    <!-- Add some custom CSS for header layout -->
     <style>
+        body {
+            margin: 0;
+        }
+
         :root {
-            --content-padding: 0 2rem 2rem 2rem
+            --content-padding: 0 2rem 2rem 2rem;
+            --wide-screen-breakpoint: 800px;
+        }
+        @media screen and (max-width: 799px) {
+            :root {
+                --content-padding: 0;
+            }
+        }
+
+        @media screen and (min-width: 1200px) {
+            :root {
+                --content-padding: 0 6rem 4rem 6rem;
+            }
         }
 
         .post-header {
@@ -16,9 +31,26 @@
             text-align: left;
             margin-bottom: 2rem;
         }
-        .post-cover {
-            width: 100%;
+        @media screen and (max-width: 799px) {
+            div.post-cover {
+                display: none;
+            }
+            .post-cover {
+                width: 100%;
+            }
         }
+        @media  screen and (min-width: 800px) {
+            img.post-cover {
+                display: none;
+            }
+            .post-cover {
+                width: 100%;
+                aspect-ratio: 2 / 1;    /* or any width/height ratio you like */
+                background-size: cover;
+                background-position: center;    /* will crop only if the container forces a different aspect—but here it won’t */
+            }
+        }
+
         .post-meta {
             display: flex;
             align-items: center;
@@ -50,6 +82,13 @@
         }
         .markdown-body {
             padding: var(--content-padding);
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        @media  screen and (max-width: 799px) {
+            .markdown-content {
+                padding: 0 1rem;
+            }
         }
     </style>
 </head>
@@ -59,7 +98,10 @@
     <!-- Header with cover, thumbnail, title & date -->
     <header class="post-header">
         <img class="post-cover" src="../{{ .Background }}">
-        <!-- Thumbnail + title/date -->
+        <div
+                class="post-cover"
+                style="background-image: url('../{{ .Background }}');">
+        </div>
         <div class="post-meta">
             <img
                     class="post-thumbnail"
