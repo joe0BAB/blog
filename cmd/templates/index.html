@@ -6,10 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>My Blog</title>
     <style>
-        /* CSS variables for thumbnail control */
+        /* CSS variables for thumbnail and typography control */
         :root {
-            --thumb-size: 210px; /* base size for width */
-            --thumb-ratio: 1/1;   /* width/height ratio */
+            --thumb-size: 210px;        /* base size for width */
+            --thumb-ratio: 1/1;         /* width/height ratio */
+            --title-font-size: 2rem;    /* font size for main title */
+            --post-title-font-size: 1.5rem; /* font size for each post title */
         }
 
         body {
@@ -19,14 +21,23 @@
             background: #f6f8fa;
         }
         h1 {
+            font-size: var(--title-font-size);
             border-bottom: 1px solid #e1e4e8;
             padding-bottom: .3em;
         }
         .post {
             display: flex;
-            margin: 1.5rem 0;
-            padding-bottom: 1.5rem;
+            padding: 1.5rem 0;
+            cursor: pointer;
+        }
+
+        .post:not(:last-of-type) {
             border-bottom: 1px solid #e1e4e8;
+        }
+
+        .post:hover {
+            /* subtle hover feedback */
+            background-color: rgba(0, 0, 0, 0.02);
         }
         .thumb {
             /* Use CSS variables for width and aspect ratio */
@@ -49,7 +60,7 @@
         }
         .content h2 {
             margin: 0;
-            font-size: 1.25rem;
+            font-size: var(--post-title-font-size);
         }
         .content h2 a {
             color: #0366d6;
@@ -71,7 +82,7 @@
 <body>
 <h1>Blog</h1>
 {{- range .Posts }}
-<article class="post">
+<article class="post" onclick="window.location='{{ .URL }}'">
     <div class="thumb">
         <a href="{{ .URL }}">
             <img src="{{ .Thumbnail }}" alt="{{ .Title }} thumbnail">
