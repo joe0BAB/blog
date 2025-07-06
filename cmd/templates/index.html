@@ -6,17 +6,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>My Blog</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; margin: 0; padding: 2rem; background: #f6f8fa; }
-        h1 { border-bottom: 1px solid #e1e4e8; padding-bottom: .3em; }
-        .post { display: flex; margin: 1.5rem 0; padding-bottom: 1.5rem; border-bottom: 1px solid #e1e4e8; }
-        .thumb { flex: 0 0 120px; margin-right: 1rem; }
-        .thumb img { display: block; width: 100%; border-radius: 6px; }
-        .content { flex: 1; }
-        .content h2 { margin: 0; font-size: 1.25rem; }
-        .content h2 a { color: #0366d6; text-decoration: none; }
-        .content h2 a:hover { text-decoration: underline; }
-        .content time { color: #586069; font-size: .875rem; }
-        .content p { margin: .5rem 0 0; color: #24292e; }
+        /* CSS variables for thumbnail control */
+        :root {
+            --thumb-size: 210px; /* base size for width */
+            --thumb-ratio: 1/1;   /* width/height ratio */
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            margin: 0;
+            padding: 2rem;
+            background: #f6f8fa;
+        }
+        h1 {
+            border-bottom: 1px solid #e1e4e8;
+            padding-bottom: .3em;
+        }
+        .post {
+            display: flex;
+            margin: 1.5rem 0;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #e1e4e8;
+        }
+        .thumb {
+            /* Use CSS variables for width and aspect ratio */
+            flex: 0 0 var(--thumb-size);
+            width: var(--thumb-size);
+            aspect-ratio: var(--thumb-ratio);
+            margin-right: 1rem;
+            overflow: hidden;
+        }
+        .thumb img {
+            /* Fill container, maintain aspect ratio, show maximal content */
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+        .content {
+            flex: 1;
+        }
+        .content h2 {
+            margin: 0;
+            font-size: 1.25rem;
+        }
+        .content h2 a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+        .content h2 a:hover {
+            text-decoration: underline;
+        }
+        .content time {
+            color: #586069;
+            font-size: .875rem;
+        }
+        .content p {
+            margin: .5rem 0 0;
+            color: #24292e;
+        }
     </style>
 </head>
 <body>
