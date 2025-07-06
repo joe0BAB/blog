@@ -4,43 +4,38 @@ import (
 	"bytes"
 	"flag"
 	"fmt"
-	"io"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/yuin/goldmark"
+	highlighting "github.com/yuin/goldmark-highlighting/v2"
+	"github.com/yuin/goldmark/extension"
+	"github.com/yuin/goldmark/renderer/html"
 )
 
-func copyFile(srcPath, dstPath string) error {
-	srcFile, err := os.Open(srcPath)
-	if err != nil {
-		return fmt.Errorf("opening source file %s: %w", srcPath, err)
-	}
-	defer srcFile.Close()
-
-	dstFile, err := os.Create(dstPath)
-	if err != nil {
-		return fmt.Errorf("creating destination file %s: %w", dstPath, err)
-	}
-	defer dstFile.Close()
-
-	if _, err := io.Copy(dstFile, srcFile); err != nil {
-		return fmt.Errorf("copying file: %w", err)
-	}
-	return nil
-}
-
-func convertMarkdown(srcDir, dstDir string) error {
+func convertMarkdown(srcDir, dstDir string) ([]Post, error) {
 	if err := os.MkdirAll(dstDir, 0755); err != nil {
-		return fmt.Errorf("creating output directory %s: %w", dstDir, err)
+		return nil, fmt.Errorf("creating output directory %s: %w", dstDir, err)
 	}
 	entries, err := os.ReadDir(srcDir)
 	if err != nil {
-		return fmt.Errorf("reading source directory %s: %w", srcDir, err)
+		return nil, fmt.Errorf("reading source directory %s: %w", srcDir, err)
 	}
 
-	md := goldmark.New()
+	md := goldmark.New(
+		goldmark.WithExtensions(
+			extension.GFM,
+			// Optional: syntax-highlight code blocks using Chroma with the “github” style
+			highlighting.NewHighlighting(
+				highlighting.WithStyle("github"),
+			),
+		),
+		goldmark.WithRendererOptions(
+			html.WithUnsafe(),
+		),
+	)
+	var posts []Post
 	for _, entry := range entries {
 		if entry.IsDir() {
 			continue
@@ -52,21 +47,38 @@ func convertMarkdown(srcDir, dstDir string) error {
 		srcPath := filepath.Join(srcDir, entry.Name())
 		input, err := os.ReadFile(srcPath)
 		if err != nil {
-			return fmt.Errorf("reading markdown file %s: %w", srcPath, err)
+			return nil, fmt.Errorf("reading markdown file %s: %w", srcPath, err)
 		}
+		meta, body, err := ParseFrontMatter(string(input))
+		if err != nil {
+			return nil, fmt.Errorf("parsing metadata: %w", err)
+		}
+		fmt.Printf("Title: %s (%s)\n", meta.Title, meta.Date)
 
 		var buf bytes.Buffer
-		if err := md.Convert(input, &buf); err != nil {
-			return fmt.Errorf("converting markdown %s: %w", srcPath, err)
+		if err := md.Convert([]byte(body), &buf); err != nil {
+			return nil, fmt.Errorf("converting markdown %s: %w", srcPath, err)
+		}
+
+		page, err := RenderPage(buf.String())
+		if err != nil {
+			return nil, fmt.Errorf("rendering template: %w", err)
 		}
 
 		outName := strings.TrimSuffix(entry.Name(), filepath.Ext(entry.Name())) + ".html"
 		dstPath := filepath.Join(dstDir, outName)
-		if err := os.WriteFile(dstPath, buf.Bytes(), 0644); err != nil {
-			return fmt.Errorf("writing html file %s: %w", dstPath, err)
+		if err := os.WriteFile(dstPath, []byte(page), 0644); err != nil {
+			return nil, fmt.Errorf("writing html file %s: %w", dstPath, err)
 		}
+		posts = append(posts, Post{
+			Title:     meta.Title,
+			Date:      meta.Date,
+			Teaser:    meta.Teaser,
+			Thumbnail: meta.Thumbnail,
+			URL:       filepath.Join("posts", outName),
+		})
 	}
-	return nil
+	return posts, nil
 }
 
 func main() {
@@ -81,15 +93,15 @@ func main() {
 	if err := os.MkdirAll(*outPath, 0755); err != nil {
 		fmt.Printf("Error creating directory %s: %v\n", *outPath, err)
 	}
-	srcPath := "index.html"
-	dstPath := filepath.Join(*outPath, "index.html")
-
-	if err := copyFile(srcPath, dstPath); err != nil {
-		fmt.Printf("Error copying file: %v\n", err)
-		os.Exit(1)
+	if err := copyFolder("assets", filepath.Join(*outPath, "assets")); err != nil {
+		fmt.Printf("Error copying assets: %v\n", err)
 	}
-	if err := convertMarkdown("posts", filepath.Join(*outPath, "posts")); err != nil {
+	posts, err := convertMarkdown("posts", filepath.Join(*outPath, "posts"))
+	if err != nil {
 		fmt.Printf("Error converting markdown: %v\n", err)
+	}
+	if err := RenderPosts(posts, filepath.Join(*outPath, "index.html")); err != nil {
+		fmt.Printf("Error rendering table of content: %v\n", err)
 	}
 	fmt.Println("Done.")
 }
