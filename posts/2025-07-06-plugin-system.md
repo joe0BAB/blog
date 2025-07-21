@@ -4,6 +4,7 @@ date: 2025-07-06
 teaser: How hard can it be?
 thumbnail: "assets/2025-07-06-avatar.png"
 background: "assets/2025-07-06-thumbnail.png"
+icon: 🚀
 ---
 
 ## Why do a plugin system?

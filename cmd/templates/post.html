@@ -1,9 +1,14 @@
 <head>
+    <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- GitHub Markdown styling -->
     <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.8.1/github-markdown.min.css"
+    >
+    <link
+            rel="stylesheet"
+            href="https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap"
     >
     <style>
         body {
@@ -67,6 +72,23 @@
             background-color: #fff;
             margin-right: 1rem;
         }
+        .post-icon {
+            /* size & shape */
+            width: var(--thumb-size);
+            height: var(--thumb-size);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            border: 20px solid white;
+            background-color: #fff;
+            margin-right: 1rem;
+
+            /* emoji styling */
+            font-family: 'Noto Color Emoji', 'Segoe UI Emoji', sans-serif;
+            font-size: calc(var(--thumb-size) * 0.8);
+            line-height: 1;
+        }
         .post-info {
             display: flex;
             flex-direction: column;
@@ -105,11 +127,11 @@
         </div>
         <div style="position: relative">
             <div class="post-meta">
-                <img
-                        class="post-thumbnail"
-                        src="../{{ .Thumbnail }}"
-                        alt="Post icon or thumbnail"
-                >
+                <span
+                        class="post-icon"
+                        role="img"
+                        aria-label="Post icon"
+                >{{.Icon}}</span>
             </div>
             <div class="post-info">
                 <h1 class="post-title">{{ .Title }}</h1>

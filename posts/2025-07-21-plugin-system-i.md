@@ -3,6 +3,7 @@ title: "Plugin Systems Part I"
 date: 2025-07-21
 teaser: How hard can it be?
 background: "assets/2025-07-21-background.png"
+icon: 🔌
 ---
 
 ## Why do a plugin system?

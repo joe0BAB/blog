@@ -16,6 +16,7 @@ type Post struct {
 	Thumbnail  string
 	Background string
 	URL        string
+	Icon       string
 }
 
 //go:embed templates

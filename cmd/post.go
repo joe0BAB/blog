@@ -15,6 +15,7 @@ type Meta struct {
 	Teaser     string    `yaml:"teaser"`
 	Thumbnail  string    `yaml:"thumbnail"`
 	Background string    `yaml:"background"`
+	Icon       string    `yaml:"icon"`
 }
 
 func ParseFrontMatter(input string) (Meta, string, error) {

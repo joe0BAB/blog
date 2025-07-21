@@ -70,6 +70,7 @@ func convertMarkdown(srcDir, dstDir string) ([]Post, error) {
 			Thumbnail:  meta.Thumbnail,
 			Background: meta.Background,
 			URL:        filepath.Join("posts", outName),
+			Icon:       meta.Icon,
 		}
 
 		page, err := RenderPage(buf.String(), post)
